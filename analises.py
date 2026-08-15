@@ -1,6 +1,3 @@
-from langchain_core.tools import Tool
-
-
 def analisar_reposicao(df):
     # Filtra produtos abaixo do mínimo
     produtos_criticos = df[
@@ -33,13 +30,28 @@ def analisar_reposicao(df):
 
     return produtos_criticos[colunas_relevantes]
 
-def criar_tool_reposicao(df):
-    return Tool(
-        name="analisar_reposicao",
-        func=lambda _: analisar_reposicao(df),
-        description=(
-            "Analise os produtos que estão abaixo do estoque mínimo "
-            "e calcule a quantidade sugerida para reposição e o "
-            "custo estimado da compra."
-        )
+def analisar_encalhados(df):
+    # Filtra produtos sem venda há 30 dias ou mais
+    produtos_encalhados = df[
+        df["dias_sem_venda"] >= 30
+    ].copy()
+
+    # Calcula o valor investido no estoque parado
+    produtos_encalhados["valor_estoque_parado"] = (
+        produtos_encalhados["estoque_atual"]
+        * produtos_encalhados["custo_unitario"]
     )
+
+    # Seleciona colunas relevantes
+    colunas_relevantes = [
+        "codigo_produto",
+        "produto",
+        "categoria",
+        "estoque_atual",
+        "custo_unitario",
+        "preco_venda",
+        "dias_sem_venda",
+        "valor_estoque_parado"
+    ]
+
+    return produtos_encalhados[colunas_relevantes]
