@@ -64,30 +64,28 @@ def analisar_promocoes(df):
         df["dias_sem_venda"] >= 30
     ].copy()
 
-    # Define os cenários de desconto que serão analisados
     descontos = [10, 20, 30]
 
-    resultados = []
+    # Guarda os resultados de cada cenário
+    cenarios = []
 
-    # Define a classificação de acordo com a margem
-    def classificar_margem(margem):
-        if margem >= 25:
-            return "Promoção recomendada"
-        elif margem >= 15:
-            return "Promoção possível"
-        else:
-            return "Promoção não recomendada"
-
-    # Executa a análise para cada percentual de desconto
     for desconto in descontos:
 
-        # Cria uma cópia dos produtos para este cenário
-        cenario = produtos_promocao.copy()
-
-        # Calcula o fator que representa o preço após o desconto
-        fator_desconto = 1 - (desconto / 100)
+        cenario = produtos_promocao[
+            [
+                "codigo_produto",
+                "produto",
+                "categoria",
+                "estoque_atual",
+                "custo_unitario",
+                "preco_venda",
+                "dias_sem_venda"
+            ]
+        ].copy()
 
         # Calcula o preço promocional
+        fator_desconto = 1 - (desconto / 100)
+
         cenario["preco_promocional"] = (
             cenario["preco_venda"] * fator_desconto
         )
@@ -98,7 +96,7 @@ def analisar_promocoes(df):
             - cenario["preco_promocional"]
         )
 
-        # Calcula a margem percentual após o desconto
+        # Calcula a margem após o desconto
         cenario["margem_promocional"] = (
             (
                 cenario["preco_promocional"]
@@ -108,29 +106,78 @@ def analisar_promocoes(df):
             * 100
         )
 
-        cenario["valor_estoque_parado"] = (
-            cenario["estoque_atual"]
-            * cenario["custo_unitario"]
+        # Guarda o cenário
+        cenario = cenario[
+            [
+                "codigo_produto",
+                "preco_promocional",
+                "desconto_reais",
+                "margem_promocional"
+            ]
+        ]
+
+        cenario = cenario.rename(
+            columns={
+                "preco_promocional": f"preco_{desconto}%",
+                "desconto_reais": f"desconto_reais_{desconto}%",
+                "margem_promocional": f"margem_{desconto}%"
+            }
         )
 
-        # Registra o percentual de desconto utilizado
-        cenario["desconto_percentual"] = desconto
+        cenarios.append(cenario)
 
-        # Classifica o cenário de promoção
-        cenario["classificacao"] = (
-            cenario["margem_promocional"].apply(classificar_margem)
+    # Começa com os dados básicos dos produtos
+    resultado_final = produtos_promocao[
+        [
+            "codigo_produto",
+            "produto",
+            "categoria",
+            "estoque_atual",
+            "custo_unitario",
+            "preco_venda",
+            "dias_sem_venda"
+        ]
+    ].copy()
+
+    # Adiciona os três cenários lado a lado
+    for cenario in cenarios:
+        resultado_final = resultado_final.merge(
+            cenario,
+            on="codigo_produto",
+            how="left"
         )
 
-        # Adiciona o cenário à lista de resultados
-        resultados.append(cenario)
-
-    # Junta todos os cenários em um único DataFrame
-    resultado_final = pd.concat(
-        resultados,
-        ignore_index=True
+    # Calcula o valor do estoque parado
+    resultado_final["valor_estoque_parado"] = (
+        resultado_final["estoque_atual"]
+        * resultado_final["custo_unitario"]
     )
 
-    # Seleciona colunas relevantes
+    # Classifica cada cenário de acordo com a margem
+    def classificar_margem(margem):
+        if margem >= 25:
+            return "Promoção recomendada"
+        elif margem >= 15:
+            return "Promoção possível"
+        else:
+            return "Promoção não recomendada"
+
+    resultado_final["classificacao_10%"] = (
+        resultado_final["margem_10%"]
+        .apply(classificar_margem)
+    )
+
+    resultado_final["classificacao_20%"] = (
+        resultado_final["margem_20%"]
+        .apply(classificar_margem)
+    )
+
+    resultado_final["classificacao_30%"] = (
+        resultado_final["margem_30%"]
+        .apply(classificar_margem)
+    )
+
+    # Organiza as colunas finais
     colunas_relevantes = [
         "codigo_produto",
         "produto",
@@ -138,13 +185,24 @@ def analisar_promocoes(df):
         "estoque_atual",
         "custo_unitario",
         "preco_venda",
-        "desconto_percentual",
-        "preco_promocional",
-        "desconto_reais",
+
+        "preco_10%",
+        "desconto_reais_10%",
+        "margem_10%",
+        "classificacao_10%",
+
+        "preco_20%",
+        "desconto_reais_20%",
+        "margem_20%",
+        "classificacao_20%",
+
+        "preco_30%",
+        "desconto_reais_30%",
+        "margem_30%",
+        "classificacao_30%",
+
         "dias_sem_venda",
-        "valor_estoque_parado",
-        "margem_promocional",
-        "classificacao"
+        "valor_estoque_parado"
     ]
 
     return resultado_final[colunas_relevantes]
