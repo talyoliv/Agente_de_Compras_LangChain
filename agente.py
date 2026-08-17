@@ -10,7 +10,8 @@ from tools import (
     criar_tool_encalhados,
     criar_tool_promocoes,
     criar_tool_orcamento,
-    criar_tool_risco_ruptura
+    criar_tool_risco_ruptura,
+    criar_tool_categoria
 )
 
 load_dotenv()
@@ -30,13 +31,15 @@ tool_encalhados = criar_tool_encalhados(df)
 tool_promocoes = criar_tool_promocoes(df)
 tool_orcamento = criar_tool_orcamento(df)
 tool_risco_ruptura = criar_tool_risco_ruptura(df)
+tool_categoria = criar_tool_categoria(df)
 
 tools = [
     tool_reposicao,
     tool_encalhados,
     tool_promocoes,
     tool_orcamento,
-    tool_risco_ruptura
+    tool_risco_ruptura,
+    tool_categoria
 ]
 
 prompt = ChatPromptTemplate.from_messages([
@@ -57,6 +60,14 @@ prompt = ChatPromptTemplate.from_messages([
         Quando o usuário informar um valor de orçamento, considere esse
         valor como limite máximo para a análise e priorize os produtos
         mais críticos de acordo com o nível de estoque.
+
+        Para análises por categoria, compare os indicadores de estoque
+        e destaque as categorias mais críticas, considerando conjuntamente
+        ruptura, produtos abaixo do mínimo e estoque parado.
+
+        Não recomende descarte de produtos apenas porque estão encalhados.
+        Quando houver estoque parado, priorize sugestões como promoção,
+        desconto, aumento de giro ou outras estratégias comerciais.
 
         Responda de forma clara, objetiva e em português.
         """

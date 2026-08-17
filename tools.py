@@ -5,7 +5,8 @@ from analises import (
     analisar_encalhados,
     analisar_promocoes,
     analisar_orcamento,
-    analisar_risco_ruptura
+    analisar_risco_ruptura,
+    analisar_por_categoria
 )
 
 
@@ -68,5 +69,18 @@ def criar_tool_risco_ruptura(df):
             "considerando o nível de estoque atual em relação ao estoque mínimo. "
             "Classifique os produtos em risco alto ou risco médio e mostre "
             "quais produtos precisam de atenção."
+        )
+    )
+
+def criar_tool_categoria(df):
+    return Tool(
+        name="analisar_por_categoria",
+        func=lambda _: analisar_por_categoria(df),
+        description=(
+            "Analise os problemas do estoque agrupando os produtos por categoria. "
+            "Informe a quantidade total de produtos, quantos estão abaixo do "
+            "estoque mínimo, quantos estão encalhados, quantos apresentam risco "
+            "alto de ruptura, o valor de estoque parado e o percentual de "
+            "produtos abaixo do estoque mínimo."
         )
     )

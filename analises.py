@@ -327,3 +327,61 @@ def analisar_risco_ruptura(df):
     ]
 
     return resultado[colunas_relevantes]
+
+def analisar_por_categoria(df):
+    resultado = df.copy()
+
+    # Identifica produtos abaixo do estoque mínimo
+    resultado["abaixo_minimo"] = (
+        resultado["estoque_atual"] < resultado["estoque_minimo"]
+    )
+
+    # Identifica produtos encalhados
+    resultado["encalhado"] = (
+        resultado["dias_sem_venda"] >= 30
+    )
+
+    # Calcula o nível de estoque
+    resultado["nivel_estoque"] = (
+        resultado["estoque_atual"] / resultado["estoque_minimo"]
+    )
+
+    # Identifica risco de ruptura
+    resultado["risco_alto"] = (
+        resultado["nivel_estoque"] <= 0.5
+    )
+
+    # Calcula o valor parado no estoque
+    resultado["valor_estoque_parado"] = (
+        resultado["estoque_atual"]
+        * resultado["custo_unitario"]
+    )
+
+    # Agrupa os indicadores por categoria
+    resumo = (
+        resultado
+        .groupby("categoria")
+        .agg(
+            total_produtos=("codigo_produto", "count"),
+            produtos_abaixo_minimo=("abaixo_minimo", "sum"),
+            produtos_encalhados=("encalhado", "sum"),
+            produtos_risco_alto=("risco_alto", "sum"),
+            valor_estoque_parado=("valor_estoque_parado", "sum")
+        )
+        .reset_index()
+    )
+
+    # Calcula o percentual de produtos abaixo do mínimo
+    resumo["percentual_abaixo_minimo"] = (
+        resumo["produtos_abaixo_minimo"]
+        / resumo["total_produtos"]
+        * 100
+    )
+
+    # Ordena pelas categorias com maior valor parado
+    resumo = resumo.sort_values(
+        "valor_estoque_parado",
+        ascending=False
+    )
+
+    return resumo

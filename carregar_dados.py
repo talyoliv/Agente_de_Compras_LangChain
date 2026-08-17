@@ -5,7 +5,8 @@ from tools import (
     criar_tool_encalhados,
     criar_tool_promocoes,
     criar_tool_orcamento,
-    criar_tool_risco_ruptura
+    criar_tool_risco_ruptura,
+    criar_tool_categoria
 )
 
 
@@ -16,6 +17,7 @@ tool_encalhados = criar_tool_encalhados(df)
 tool_promocoes = criar_tool_promocoes(df)
 tool_orcamento = criar_tool_orcamento(df)
 tool_risco_ruptura = criar_tool_risco_ruptura(df)
+tool_categoria = criar_tool_categoria(df)
 
 
 resultado_reposicao = tool_reposicao.invoke("")
@@ -49,3 +51,9 @@ resultado_risco = tool_risco_ruptura.invoke("")
 
 print("\n=== RISCO DE RUPTURA ===")
 print(resultado_risco)
+
+
+resultado_categoria = tool_categoria.invoke("")
+
+print("\n=== ANÁLISE POR CATEGORIA ===")
+print(resultado_categoria)
