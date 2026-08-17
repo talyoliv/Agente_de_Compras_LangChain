@@ -1,4 +1,5 @@
-from langchain_core.tools import Tool
+from langchain_core.tools import Tool, StructuredTool
+from pydantic import BaseModel, Field
 
 from analises import (
     analisar_reposicao,
@@ -46,19 +47,26 @@ def criar_tool_promocoes(df):
         )
     )
 
+class OrcamentoInput(BaseModel):
+    orcamento: float = Field(
+        description="Valor máximo disponível para compra. Exemplo: 5000."
+    )
+
+
 def criar_tool_orcamento(df):
-    return Tool(
+    def executar_orcamento(orcamento: float):
+        return analisar_orcamento(df, orcamento)
+
+    return StructuredTool.from_function(
+        func=executar_orcamento,
         name="analisar_orcamento",
-        func=lambda orcamento: analisar_orcamento(
-            df,
-            float(orcamento)
-        ),
         description=(
             "Analise quais produtos devem ser priorizados para reposição "
-            "considerando um orçamento informado pelo usuário. "
+            "considerando o orçamento informado pelo usuário. "
             "Informe os produtos selecionados, a quantidade sugerida, "
             "o custo estimado, o valor utilizado e o saldo disponível."
-        )
+        ),
+        args_schema=OrcamentoInput
     )
 
 def criar_tool_risco_ruptura(df):
