@@ -6,7 +6,8 @@ from analises import (
     analisar_promocoes,
     analisar_orcamento,
     analisar_risco_ruptura,
-    analisar_por_categoria
+    analisar_por_categoria,
+    analisar_validade
 )
 
 
@@ -82,5 +83,17 @@ def criar_tool_categoria(df):
             "estoque mínimo, quantos estão encalhados, quantos apresentam risco "
             "alto de ruptura, o valor de estoque parado e o percentual de "
             "produtos abaixo do estoque mínimo."
+        )
+    )
+
+def criar_tool_validade(df):
+    return Tool(
+        name="analisar_validade",
+        func=lambda _: analisar_validade(df),
+        description=(
+            "Analise os produtos próximos do vencimento ou já vencidos. "
+            "Informe a data de validade, quantos dias faltam para vencer "
+            "e classifique os produtos como validade crítica, validade "
+            "próxima ou produto vencido."
         )
     )

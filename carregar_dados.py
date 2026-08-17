@@ -6,7 +6,8 @@ from tools import (
     criar_tool_promocoes,
     criar_tool_orcamento,
     criar_tool_risco_ruptura,
-    criar_tool_categoria
+    criar_tool_categoria,
+    criar_tool_validade
 )
 
 
@@ -18,6 +19,7 @@ tool_promocoes = criar_tool_promocoes(df)
 tool_orcamento = criar_tool_orcamento(df)
 tool_risco_ruptura = criar_tool_risco_ruptura(df)
 tool_categoria = criar_tool_categoria(df)
+tool_validade = criar_tool_validade(df)
 
 
 resultado_reposicao = tool_reposicao.invoke("")
@@ -57,3 +59,9 @@ resultado_categoria = tool_categoria.invoke("")
 
 print("\n=== ANÁLISE POR CATEGORIA ===")
 print(resultado_categoria)
+
+
+resultado_validade = tool_validade.invoke("")
+
+print("\n=== ANÁLISE POR VALIDADE ===")
+print(resultado_validade)

@@ -11,7 +11,8 @@ from tools import (
     criar_tool_promocoes,
     criar_tool_orcamento,
     criar_tool_risco_ruptura,
-    criar_tool_categoria
+    criar_tool_categoria,
+    criar_tool_validade
 )
 
 load_dotenv()
@@ -32,6 +33,7 @@ tool_promocoes = criar_tool_promocoes(df)
 tool_orcamento = criar_tool_orcamento(df)
 tool_risco_ruptura = criar_tool_risco_ruptura(df)
 tool_categoria = criar_tool_categoria(df)
+tool_validade = criar_tool_validade(df)
 
 tools = [
     tool_reposicao,
@@ -39,7 +41,8 @@ tools = [
     tool_promocoes,
     tool_orcamento,
     tool_risco_ruptura,
-    tool_categoria
+    tool_categoria,
+     tool_validade
 ]
 
 prompt = ChatPromptTemplate.from_messages([
@@ -68,6 +71,9 @@ prompt = ChatPromptTemplate.from_messages([
         Não recomende descarte de produtos apenas porque estão encalhados.
         Quando houver estoque parado, priorize sugestões como promoção,
         desconto, aumento de giro ou outras estratégias comerciais.
+
+        Quando o usuário perguntar sobre validade, vencimento ou produtos
+        próximos do vencimento, utilize a ferramenta analisar_validade.
 
         Responda de forma clara, objetiva e em português.
         """

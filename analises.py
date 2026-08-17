@@ -385,3 +385,65 @@ def analisar_por_categoria(df):
     )
 
     return resumo
+
+def analisar_validade(df):
+    # Cria uma cópia para não alterar o DataFrame original
+    produtos = df.copy()
+
+    # Converte a coluna de validade para data
+    produtos["validade"] = pd.to_datetime(
+        produtos["validade"],
+        errors="coerce"
+    )
+
+    # Considera a data atual como referência
+    hoje = pd.Timestamp.today().normalize()
+
+    # Calcula quantos dias faltam para o vencimento
+    produtos["dias_para_vencer"] = (
+        produtos["validade"] - hoje
+    ).dt.days
+
+    # Classifica os produtos de acordo com a proximidade do vencimento
+    def classificar_validade(dias):
+        if pd.isna(dias):
+            return "Data de validade inválida"
+        elif dias < 0:
+            return "Produto vencido"
+        elif dias <= 30:
+            return "Validade crítica"
+        elif dias <= 60:
+            return "Validade próxima"
+        else:
+            return "Validade normal"
+
+    produtos["classificacao_validade"] = (
+        produtos["dias_para_vencer"].apply(classificar_validade)
+    )
+
+    # Mantém somente produtos que precisam de atenção
+    resultado = produtos[
+        produtos["classificacao_validade"].isin([
+            "Produto vencido",
+            "Validade crítica",
+            "Validade próxima"
+        ])
+    ].copy()
+
+    # Ordena do mais urgente para o menos urgente
+    resultado = resultado.sort_values(
+        by="dias_para_vencer"
+    )
+
+    # Seleciona as informações relevantes
+    colunas_relevantes = [
+        "codigo_produto",
+        "produto",
+        "categoria",
+        "estoque_atual",
+        "validade",
+        "dias_para_vencer",
+        "classificacao_validade"
+    ]
+
+    return resultado[colunas_relevantes]
