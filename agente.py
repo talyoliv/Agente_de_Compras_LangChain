@@ -9,7 +9,8 @@ from tools import (
     criar_tool_reposicao,
     criar_tool_encalhados,
     criar_tool_promocoes,
-    criar_tool_orcamento
+    criar_tool_orcamento,
+    criar_tool_risco_ruptura
 )
 
 load_dotenv()
@@ -28,12 +29,14 @@ tool_reposicao = criar_tool_reposicao(df)
 tool_encalhados = criar_tool_encalhados(df)
 tool_promocoes = criar_tool_promocoes(df)
 tool_orcamento = criar_tool_orcamento(df)
+tool_risco_ruptura = criar_tool_risco_ruptura(df)
 
 tools = [
     tool_reposicao,
     tool_encalhados,
     tool_promocoes,
-    tool_orcamento
+    tool_orcamento,
+    tool_risco_ruptura
 ]
 
 prompt = ChatPromptTemplate.from_messages([

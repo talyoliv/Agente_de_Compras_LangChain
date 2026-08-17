@@ -4,7 +4,8 @@ from analises import (
     analisar_reposicao,
     analisar_encalhados,
     analisar_promocoes,
-    analisar_orcamento
+    analisar_orcamento,
+    analisar_risco_ruptura
 )
 
 
@@ -55,5 +56,17 @@ def criar_tool_orcamento(df):
             "considerando um orçamento informado pelo usuário. "
             "Informe os produtos selecionados, a quantidade sugerida, "
             "o custo estimado, o valor utilizado e o saldo disponível."
+        )
+    )
+
+def criar_tool_risco_ruptura(df):
+    return Tool(
+        name="analisar_risco_ruptura",
+        func=lambda _: analisar_risco_ruptura(df),
+        description=(
+            "Analise os produtos que estão próximos de uma ruptura de estoque, "
+            "considerando o nível de estoque atual em relação ao estoque mínimo. "
+            "Classifique os produtos em risco alto ou risco médio e mostre "
+            "quais produtos precisam de atenção."
         )
     )

@@ -282,3 +282,48 @@ def analisar_orcamento(df, orcamento):
         "valor_disponivel": valor_disponivel,
         "mensagem": "Produtos priorizados de acordo com o nível de estoque e o orçamento informado."
     }
+
+def analisar_risco_ruptura(df):
+    # Calcula o nível atual do estoque em relação ao estoque mínimo
+    resultado = df.copy()
+
+    resultado["nivel_estoque"] = (
+        resultado["estoque_atual"] / resultado["estoque_minimo"]
+    )
+
+    # Classifica o risco de ruptura
+    def classificar_risco(nivel):
+        if nivel <= 0.5:
+            return "Risco alto"
+        elif nivel <= 0.8:
+            return "Risco médio"
+        else:
+            return "Risco baixo"
+
+    resultado["risco_ruptura"] = (
+        resultado["nivel_estoque"].apply(classificar_risco)
+    )
+
+    # Seleciona apenas produtos com risco alto ou médio
+    resultado = resultado[
+        resultado["risco_ruptura"].isin(
+            ["Risco alto", "Risco médio"]
+        )
+    ]
+
+    # Ordena do maior risco para o menor
+    resultado = resultado.sort_values(
+        "nivel_estoque"
+    )
+
+    colunas_relevantes = [
+        "codigo_produto",
+        "produto",
+        "categoria",
+        "estoque_atual",
+        "estoque_minimo",
+        "nivel_estoque",
+        "risco_ruptura"
+    ]
+
+    return resultado[colunas_relevantes]
