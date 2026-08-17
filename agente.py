@@ -94,11 +94,3 @@ agent_executor = AgentExecutor(
     verbose=True
 )
 
-pergunta = input("\nDigite sua pergunta sobre o estoque: ")
-
-resposta = agent_executor.invoke({
-    "input": pergunta
-})
-
-print("\n=== RESPOSTA DO AGENTE ===")
-print(resposta["output"])
