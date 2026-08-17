@@ -8,7 +8,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from tools import (
     criar_tool_reposicao,
     criar_tool_encalhados,
-    criar_tool_promocoes
+    criar_tool_promocoes,
+    criar_tool_orcamento
 )
 
 load_dotenv()
@@ -26,11 +27,13 @@ df = pd.read_csv("dados/estoque_produtos_limpeza_challenge.csv")
 tool_reposicao = criar_tool_reposicao(df)
 tool_encalhados = criar_tool_encalhados(df)
 tool_promocoes = criar_tool_promocoes(df)
+tool_orcamento = criar_tool_orcamento(df)
 
 tools = [
     tool_reposicao,
     tool_encalhados,
-    tool_promocoes
+    tool_promocoes,
+    tool_orcamento
 ]
 
 prompt = ChatPromptTemplate.from_messages([
@@ -44,6 +47,13 @@ prompt = ChatPromptTemplate.from_messages([
 
         Utilize as ferramentas disponíveis sempre que a pergunta
         depender dos dados do estoque.
+
+        Para perguntas que envolvam um orçamento disponível para compras,
+        utilize a ferramenta analisar_orcamento.
+
+        Quando o usuário informar um valor de orçamento, considere esse
+        valor como limite máximo para a análise e priorize os produtos
+        mais críticos de acordo com o nível de estoque.
 
         Responda de forma clara, objetiva e em português.
         """

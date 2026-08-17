@@ -206,3 +206,79 @@ def analisar_promocoes(df):
     ]
 
     return resultado_final[colunas_relevantes]
+
+def analisar_orcamento(df, orcamento):
+    # Seleciona produtos que estão abaixo do estoque mínimo
+    produtos_reposicao = df[
+        df["estoque_atual"] < df["estoque_minimo"]
+    ].copy()
+
+    # Calcula a quantidade necessária para atingir o estoque máximo
+    produtos_reposicao["quantidade_sugerida"] = (
+        produtos_reposicao["estoque_maximo"]
+        - produtos_reposicao["estoque_atual"]
+    )
+
+    # Calcula o custo total da reposição de cada produto
+    produtos_reposicao["custo_estimado"] = (
+        produtos_reposicao["quantidade_sugerida"]
+        * produtos_reposicao["custo_unitario"]
+    )
+
+    # Calcula quanto o estoque atual representa em relação ao estoque mínimo
+    produtos_reposicao["nivel_estoque"] = (
+        produtos_reposicao["estoque_atual"]
+        / produtos_reposicao["estoque_minimo"]
+    )
+
+    # Ordena pelos produtos mais críticos primeiro
+    produtos_reposicao = produtos_reposicao.sort_values(
+        by="nivel_estoque"
+    )
+
+    selecionados = []
+    valor_utilizado = 0
+
+    # Percorre os produtos priorizados
+    for _, produto in produtos_reposicao.iterrows():
+
+        custo = produto["custo_estimado"]
+
+        # Verifica se a compra cabe no orçamento
+        if valor_utilizado + custo <= orcamento:
+
+            selecionados.append(produto)
+            valor_utilizado += custo
+
+    # Converte a lista de produtos selecionados em DataFrame
+    resultado = pd.DataFrame(selecionados)
+
+    # Caso nenhum produto caiba no orçamento
+    if resultado.empty:
+        return {
+            "produtos": resultado,
+            "valor_utilizado": 0,
+            "valor_disponivel": orcamento,
+            "mensagem": "Nenhum produto para reposição cabe no orçamento informado."
+        }
+
+    # Calcula o saldo restante
+    valor_disponivel = orcamento - valor_utilizado
+
+    colunas_relevantes = [
+        "codigo_produto",
+        "produto",
+        "estoque_atual",
+        "estoque_minimo",
+        "quantidade_sugerida",
+        "custo_unitario",
+        "custo_estimado",
+        "nivel_estoque"
+    ]
+
+    return {
+        "produtos": resultado[colunas_relevantes],
+        "valor_utilizado": valor_utilizado,
+        "valor_disponivel": valor_disponivel,
+        "mensagem": "Produtos priorizados de acordo com o nível de estoque e o orçamento informado."
+    }

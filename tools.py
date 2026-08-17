@@ -3,7 +3,8 @@ from langchain_core.tools import Tool
 from analises import (
     analisar_reposicao,
     analisar_encalhados,
-    analisar_promocoes
+    analisar_promocoes,
+    analisar_orcamento
 )
 
 
@@ -39,5 +40,20 @@ def criar_tool_promocoes(df):
             "percentuais de desconto, calculando o preço promocional, "
             "o desconto em reais, a margem promocional e classificando "
             "as oportunidades de promoção."
+        )
+    )
+
+def criar_tool_orcamento(df):
+    return Tool(
+        name="analisar_orcamento",
+        func=lambda orcamento: analisar_orcamento(
+            df,
+            float(orcamento)
+        ),
+        description=(
+            "Analise quais produtos devem ser priorizados para reposição "
+            "considerando um orçamento informado pelo usuário. "
+            "Informe os produtos selecionados, a quantidade sugerida, "
+            "o custo estimado, o valor utilizado e o saldo disponível."
         )
     )
