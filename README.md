@@ -2,6 +2,14 @@
 
 Agente inteligente para análise de estoque e apoio à tomada de decisões na área de compras.
 
+## ☁️ Cloud Computing Service
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://seu-app.streamlit.app)
+
+
+**Deploy:**  
+👉 [Acesse o Agente de Compras aqui](https://agentedecompraslangchaintalita.streamlit.app/)
+
 ## 📌 Sobre o projeto
 
 O **Agente de Compras** é uma aplicação desenvolvida em Python que utiliza Inteligência Artificial para analisar dados de estoque de produtos de limpeza e auxiliar o comprador na identificação de problemas e oportunidades.
@@ -424,12 +432,5 @@ Durante o desenvolvimento do projeto foram trabalhados conceitos de:
 
 Projeto desenvolvido para o desafio **ONE AI FOR TECH**, com foco na aplicação de Inteligência Artificial para análise de estoque e apoio à tomada de decisão em compras.
 
-## ☁️ Cloud Computing Service
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://seu-app.streamlit.app)
-
-
-**Deploy:**  
-👉 [Acesse o Agente de Compras aqui](https://agentedecompraslangchaintalita.streamlit.app/)
 
 
