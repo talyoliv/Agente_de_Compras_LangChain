@@ -426,11 +426,40 @@ Durante o desenvolvimento do projeto foram trabalhados conceitos de:
 - testes e depuração de aplicações com IA;
 - interação entre código determinístico e IA generativa.
 
-##👩‍💻 Projeto
+## 👩‍💻 Projeto
 
 ### Agente de Compras — LangChain
 
 Projeto desenvolvido para o desafio **ONE AI FOR TECH**, com foco na aplicação de Inteligência Artificial para análise de estoque e apoio à tomada de decisão em compras.
+
+## Evidências do Deploy e Funcionamento
+
+Abaixo estão as evidências das consultas realizadas no agente rodando no Streamlit Cloud:
+
+### 1. Quais produtos precisam de reposição?
+[![Quais produtos precisam de reposição?](./imagens/imagem_1.png)](./imagens/imagem_1.png)
+
+### 2. Quais produtos estão encalhados?
+[![Quais produtos estão encalhados?](./imagens/imagem_2.png)](./imagens/imagem_2.png)
+
+### 3. Quais produtos têm oportunidade de promoção?
+[![Quais produtos têm oportunidade de promoção?](./imagens/imagem_3.png)](./imagens/imagem_3.png)
+
+### 4. Tenho R$ 5.000 para comprar. O que devo priorizar?
+[![Tenho R$ 5.000 para comprar. O que devo priorizar?](./imagens/imagem_4.png)](./imagens/imagem_4.png)
+
+### 5. Quais produtos estão em risco de ruptura?
+[![Quais produtos estão em risco de ruptura?](./imagens/imagem_5.png)](./imagens/imagem_5.png)
+
+### 6. Quais categorias têm os maiores problemas?
+[![Quais categorias têm os maiores problemas?](./imagens/imagem_6.png)](./imagens/imagem_6.png)
+
+### 7. Quais produtos estão próximos do vencimento?
+[![Quais produtos estão próximos do vencimento?](./imagens/imagem_7.png)](./imagens/imagem_7.png)
+
+### 8. Quais produtos estão próximos do vencimento e quais precisam de ação imediata?
+[![Quais produtos estão próximos do vencimento e quais precisam de ação imediata?](./imagens/imagem_8.png)](./imagens/imagem_8.png)
+
 
 
 
