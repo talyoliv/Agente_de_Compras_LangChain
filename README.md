@@ -424,8 +424,12 @@ Durante o desenvolvimento do projeto foram trabalhados conceitos de:
 
 Projeto desenvolvido para o desafio **ONE AI FOR TECH**, com foco na aplicação de Inteligência Artificial para análise de estoque e apoio à tomada de decisão em compras.
 
-## ☁️ Deploy
+## ☁️ Cloud Computing Service
 
-> Deploy será disponibilizado em breve.
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://seu-app.streamlit.app)
+
+
+**Deploy:**  
+👉 [Acesse o Agente de Compras aqui](https://agentedecompraslangchaintalita.streamlit.app/)
 
 
